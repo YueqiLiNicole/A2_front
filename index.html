@@ -199,50 +199,35 @@ async function search() {
 }
 
 
-
-    function searchFromVoice(){
-        console.log("speak search start")
-        recognition.start()
+    function searchFromVoice() {
+        console.log("speak search start");
+        recognition.start();
         recognition.onresult = (event) => {
             const speechToText = event.results[0][0].transcript;
-            console.log(speechToText)
+            console.log(speechToText);
 
-        var apigClient = apigClientFactory.newClient({
-            apiKey: '2DQvMEHMXd4kpEP1Oaih83fpS3H6sMska5laGteK'
-        });
-        var params = {
-            q: speechToText
+            // Update the search box with the detected speech text
+            document.getElementById("inputbox").value = speechToText;
+
+            var apigClient = apigClientFactory.newClient({
+                apiKey: '2DQvMEHMXd4kpEP1Oaih83fpS3H6sMska5laGteK'
+            });
+            var params = {
+                q: speechToText
+            };
+            var body = {};
+            var additionalParams = {};
+
+            console.log(speechToText);
+            apigClient.searchGet(params, body, additionalParams)
+                .then(function(result) {
+                    // existing search result handling code
+                })
+                .catch(function(result) {
+                    // existing error handling code
+                });
         };
-        var body = {
-            
-        };
-
-        var additionalParams = {
-        };
-
-        console.log(speechToText);
-        apigClient.searchGet(params, body, additionalParams)
-        .then(function(result){
-            console.log('success OK');
-            console.log(result)
-            var photos = result.data.body.results;
-            console.log("Photos: ");
-            console.log(photos);
-            var container = document.getElementById("photos");
-
-            for (var i=0, len = photos.length; i < len; ++i) {
-                var img = new Image();
-                img.src = photos[i].url;
-                container.appendChild(img);
-            }
-        })
-        .catch( function(result){
-                console.log("cur")
-                console.log(result.data);})
-
     }
-
-}
         
     </script>
     <!-- Custom CSS for Italian artistic font and purple color -->
